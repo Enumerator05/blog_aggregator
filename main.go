@@ -8,6 +8,7 @@ import (
     _ "github.com/lib/pq"
     "blot_aggregator/internal/database"
     "database/sql"
+    "fmt"
 )
 
 type apiConfig struct {
@@ -39,14 +40,15 @@ func main() {
     mux.HandleFunc("GET /v1/users", cfg.HandlerGetUser)
     mux.HandleFunc("POST /v1/feeds", cfg.MiddlewareAuth(cfg.HandlerCreateFeed))
     mux.HandleFunc("GET /v1/feeds", cfg.HandlerGetFeeds)
-    mux.HandleFunc("DELETE /v1/feeds_follows/{feed_follow}", cfg.MiddlewareAuth(cfg.HandlerDeleteFeedFollow))
-    mux.HandleFunc("POST /v1/feeds_follows/", cfg.MiddlewareAuth(cfg.HandlerCreateFeedFollow))
-    mux.HandleFunc("GET /v1/feeds_follows/", cfg.MiddlewareAuth(cfg.HandlerGetFeedFollows))
+    mux.HandleFunc("DELETE /v1/feed_follows/{feed_follow_id}", cfg.MiddlewareAuth(cfg.HandlerDeleteFeedFollow))
+    mux.HandleFunc("POST /v1/feed_follows/", cfg.MiddlewareAuth(cfg.HandlerCreateFeedFollow))
+    mux.HandleFunc("GET /v1/feed_follows/", cfg.MiddlewareAuth(cfg.HandlerGetFeedFollows))
 
     srv := http.Server{
         Addr:   ":" + port,
         Handler:    mux,
     }
 
+    log.Print(fmt.Sprintf("starting on port %s", port))
     log.Fatal(srv.ListenAndServe())
 }

@@ -20,6 +20,7 @@ func (cfg *apiConfig) HandlerCreateUser(w http.ResponseWriter, r *http.Request) 
     err := decoder.Decode(&param)
 
     if err != nil {
+        log.Print(err)
         respondWithError(w, http.StatusInternalServerError, "Could not decode body")
         return
     }
@@ -32,7 +33,7 @@ func (cfg *apiConfig) HandlerCreateUser(w http.ResponseWriter, r *http.Request) 
     })
 
     if err != nil {
-        log.Fatal(err)
+        log.Print(err)
         respondWithError(w, http.StatusInternalServerError, "Could not Create user")
         return
     }
